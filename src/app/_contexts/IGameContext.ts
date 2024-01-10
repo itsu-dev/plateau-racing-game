@@ -44,13 +44,13 @@ const defaultGameContext: IGameContext = {
 export const GameContext = createContext<IGameContext>(defaultGameContext);
 
 export default function useGameContext(): IGameContext {
-  const [steerAngle, setSteerAngle] = useState(30);
+  const [steerAngle, setSteerAngle] = useState(0);
   const [isAccelerating, setAccelerating] = useState(false);
   const [isBraking, setBraking] = useState(false);
   const [isStarted, setStarted] = useState(false);
   const [localSdp, setLocalSdp] = useState<string | undefined>(undefined);
   const [remoteSdp, setRemoteSdp] = useState<string | undefined>(undefined);
-  const [state, setState] = useState<States>("connected");
+  const [state, setState] = useState<States>("displayingQr");
 
   return {
     steerAngle, setSteerAngle,
