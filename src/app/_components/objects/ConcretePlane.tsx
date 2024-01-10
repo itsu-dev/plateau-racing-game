@@ -6,7 +6,7 @@ import * as CANNON from "cannon-es";
 export default function ConcretePlane() {
   const texture = new TextureLoader().load('assets/concrete.png');
   useEffect(() => {
-    texture.repeat.set(100, 100);
+    texture.repeat.set(1000, 1000);
     texture.wrapT = RepeatWrapping;
     texture.wrapS = RepeatWrapping;
   }, []);
