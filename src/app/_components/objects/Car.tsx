@@ -24,7 +24,7 @@ type GLTFResult = GLTF & {
   }
 }
 
-const MASS = 1.2;  // 車の質量
+const MASS = 3.0;  // 車の質量
 const SCALE_RATE = 0.0001;  // 車のスケール
 const ACCELERATION = 35.0;  // 加速度性能
 const MAX_ACCELERATION = 100.0;
@@ -73,7 +73,7 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
 
     api.applyImpulse([0, 0, -force.current], [0, 0, 0]);
-    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), Math.PI * game.steerAngle / 180);
+    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), -Math.PI * game.steerAngle / 180);
     api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
   });
 

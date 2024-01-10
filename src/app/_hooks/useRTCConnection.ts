@@ -34,7 +34,6 @@ export default function useRTCConnection() {
       console.log('Data channel error:', error);
     };
     dc.onmessage = (evt) => {
-      console.log('Data channel message:', evt.data);
       const data = JSON.parse(evt.data);
       switch (data.type) {
         case TYPE_ACCELERATOR_DOWN:
@@ -55,11 +54,9 @@ export default function useRTCConnection() {
       }
     };
     dc.onopen = (evt) => {
-      console.log('Data channel opened:', evt);
       game.setState("connected");
     };
     dc.onclose = () => {
-      console.log('Data channel closed.');
       game.setState("disconnected");
     };
   }, []);
@@ -73,7 +70,6 @@ export default function useRTCConnection() {
       if (evt.candidate) {
         // 一部の ICE candidate を取得
         // Trickle ICE では ICE candidate を相手に通知する
-        console.log(evt.candidate);
         console.log('Collecting ICE candidates');
       } else {
         // 全ての ICE candidate の取得完了（空の ICE candidate イベント）
@@ -81,7 +77,7 @@ export default function useRTCConnection() {
         // （SDP は pc.localDescription.sdp で取得できる）
         // 今回は手動でシグナリングするため textarea に SDP を表示する
         setSdp(pc.localDescription?.sdp);
-        console.log('Vanilla ICE ready', sdp.current);
+        // console.log('Vanilla ICE ready', sdp.current);
       }
     };
 
@@ -101,7 +97,7 @@ export default function useRTCConnection() {
     };
 
     pc.ondatachannel = (evt) => {
-      console.log('Data channel created:', evt);
+      console.log('Data channel created');
       setupDataChannel(evt.channel);
       dataChannel.current = evt.channel;
     };
