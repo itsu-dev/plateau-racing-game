@@ -29,6 +29,7 @@ const SCALE_RATE = 0.0001;  // 車のスケール
 const ACCELERATION = 35.0;  // 加速度性能
 const MAX_ACCELERATION = 100.0;
 const MAX_FORCE = 76.0;
+const MAX_STEER_ANGLE = 30.0;
 const MAX_SPEED = 200.0
 
 export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
@@ -67,14 +68,15 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
       force.current = lerp(force.current, 0, 0.2 * delta);
     }
 
-    console.log(game.isAccelerating, game.isBraking, force.current)
-
-    // 最大速度制限
-    force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
-
-    api.applyImpulse([0, 0, -force.current], [0, 0, 0]);
-    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), -Math.PI * game.steerAngle / 180);
+    // ハンドル制御
+    let steerAngle = game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle;
+    steerAngle =  -Math.PI * steerAngle / 180;
+    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), -Math.PI * steerAngle / 180);
     api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
+
+    // 速度制御
+    force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
+    api.applyImpulse([-force.current * Math.sin(steerAngle), 0, -force.current * Math.cos(steerAngle)], [0, 0, 0]);
   });
 
   return (
