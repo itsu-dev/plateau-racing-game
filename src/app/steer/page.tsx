@@ -20,12 +20,13 @@ export default function Steer() {
   const game = useGameContext();
 
   const connection = useRTCConnection();
-  const video = useRef(document.createElement('video'));
+  const video = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [[qr1, qr2], setQR] = useState<[string | undefined, string | undefined]>([undefined, undefined]);
   const [state, setState] = useState<"displayingQr1" | "displayingQr2" | "capturingQr" | "connecting">("displayingQr1");
 
   useEffect(() => {
+    video.current = document.createElement('video');
     connection.startPeerConnection();
   }, []);
 

@@ -38,11 +38,12 @@ export default function RTCQRCodes() {
   const connection = useRTCConnection();
   const game = useContext(GameContext);
 
-  const video = useRef(document.createElement('video'));
+  const video = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [[qr1, qr2], setQR] = useState<[string | undefined, string | undefined]>([undefined, undefined]);
 
   useEffect(() => {
+    video.current = document.createElement('video');
     connection.startPeerConnection();
   }, []);
 
