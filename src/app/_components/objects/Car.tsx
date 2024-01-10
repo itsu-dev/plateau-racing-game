@@ -183,7 +183,7 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
 
   useFrame((state: RootState, delta: number) => {
     const maxSteerVal = Math.PI / 8;
-    const maxForce = 3000;
+    const maxForce = 4000;
 
     // アクセルとブレーキの処理
     if (game.isAccelerating) {
