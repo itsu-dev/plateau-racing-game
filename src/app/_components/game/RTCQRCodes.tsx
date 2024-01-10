@@ -57,6 +57,13 @@ export default function RTCQRCodes() {
   }, [game.localSdp]);
 
   useEffect(() => {
+    if (game.remoteSdp) {
+      game.setState("connecting");
+      connection.setRemoteSdp();
+    }
+  }, [game.remoteSdp]);
+
+  useEffect(() => {
     if (game.state === "capturingQr" && canvasRef.current) {
       if (!('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)) {
         alert("このブラウザではカメラを使用できません。");

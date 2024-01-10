@@ -24,11 +24,10 @@ export default function RTCQRCodes() {
   const video = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [[qr1, qr2], setQR] = useState<[string | undefined, string | undefined]>([undefined, undefined]);
-  const [state, setState] = useState<"displayingQr1" | "displayingQr2" | "capturingQr" | "connecting">("displayingQr1");
+  const [state, setState] = useState<"displayingQr1" | "displayingQr2" | "capturingQr" | "connecting">("capturingQr");
 
   useEffect(() => {
     video.current = document.createElement('video');
-    connection.startPeerConnection();
   }, []);
 
   useEffect(() => {
@@ -39,6 +38,13 @@ export default function RTCQRCodes() {
       setQR(await createQRCode(game.localSdp!));
     })();
   }, [game.localSdp]);
+
+  useEffect(() => {
+    if (game.remoteSdp) {
+      game.setState("connecting");
+      connection.setRemoteSdp();
+    }
+  }, [game.remoteSdp]);
 
   useEffect(() => {
     if (state === "capturingQr" && canvasRef.current) {
@@ -76,8 +82,8 @@ export default function RTCQRCodes() {
             game.setRemoteSdp(remoteSdpCache! + code.data);
             (video.current!.srcObject as MediaStream).getTracks().forEach(track => track.stop());
 
-            game.setState("connecting");
             connection.setRemoteSdp();
+            setState("displayingQr1");
           }
         }
         setTimeout(tick, 200);
@@ -109,14 +115,14 @@ export default function RTCQRCodes() {
                 <QRCard index={2} src={qr2}/>
             }
               <Button onClick={() => setState(state === "displayingQr1" ? "displayingQr2" : "displayingQr1")}>もう片方のQRコードを読み取る</Button>
-              <Button onClick={() => setState("capturingQr")}>PCのQRコードを読み取る</Button>
+              {/*<Button onClick={() => setState("capturingQr")}>PCのQRコードを読み取る</Button>*/}
           </>
       }
       {qr1 && qr2 && state === "capturingQr" &&
           <>
               <p>PCに表示されているQRコードを順番に読み込んでください。</p>
               <canvas ref={canvasRef} width={300} height={500}></canvas>
-              <Button onClick={() => setState("displayingQr1")}>PC用のQRコードを表示する</Button>
+              {/*<Button onClick={() => setState("displayingQr1")}>PC用のQRコードを表示する</Button>*/}
           </>
       }
     </Wrapper>
