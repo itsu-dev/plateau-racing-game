@@ -1,7 +1,8 @@
-import React, {useEffect, useRef} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import {useBox, usePlane} from "@react-three/cannon";
 import {DoubleSide, RepeatWrapping, TextureLoader} from "three";
 import * as CANNON from "cannon-es";
+import {GameContext} from "@/app/_contexts/IGameContext";
 
 export default function ConcretePlane() {
   // const texture = new TextureLoader().load('assets/concrete.png');
@@ -10,13 +11,14 @@ export default function ConcretePlane() {
   //   texture.wrapT = RepeatWrapping;
   //   texture.wrapS = RepeatWrapping;
   // }, []);
+  const game = useContext(GameContext);
 
   const [ref] = usePlane(() => ({
-    args: [1000, 1000, 1],
+    args: [1000, 1000],
     mass: 0,
     position: [0, 0, 0],
     rotation: [-Math.PI / 2, 0, 0],
-    material: new CANNON.Material('ground'),
+    material: game.groundMaterial,
     // @ts-ignore
   }), useRef())
 
@@ -38,7 +40,7 @@ export default function ConcretePlane() {
         The thing that gives the mesh its shape
         In this case the shape is a flat plane
       */}
-      <planeGeometry args={[10000, 10000]} />
+      <planeGeometry args={[10000, 10000, 1]} />
       {/*
         The material gives a mesh its texture or look.
         In this case, it is just a uniform green
