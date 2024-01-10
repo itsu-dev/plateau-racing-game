@@ -24,10 +24,10 @@ export default function RTCQRCodes() {
   const video = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [[qr1, qr2], setQR] = useState<[string | undefined, string | undefined]>([undefined, undefined]);
-  const [state, setState] = useState<"displayingQr1" | "displayingQr2" | "capturingQr" | "connecting">("capturingQr");
 
   useEffect(() => {
     video.current = document.createElement('video');
+    game.setState("capturingQr");
   }, []);
 
   useEffect(() => {
@@ -40,14 +40,7 @@ export default function RTCQRCodes() {
   }, [game.localSdp]);
 
   useEffect(() => {
-    if (game.remoteSdp) {
-      game.setState("connecting");
-      connection.setRemoteSdp();
-    }
-  }, [game.remoteSdp]);
-
-  useEffect(() => {
-    if (state === "capturingQr" && canvasRef.current) {
+    if (game.state === "capturingQr" && canvasRef.current) {
       if (!('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)) {
         alert("このブラウザではカメラを使用できません。");
         return;
@@ -82,8 +75,8 @@ export default function RTCQRCodes() {
             game.setRemoteSdp(remoteSdpCache! + code.data);
             (video.current!.srcObject as MediaStream).getTracks().forEach(track => track.stop());
 
-            connection.setRemoteSdp();
-            setState("displayingQr1");
+            connection.setRemoteSdp(remoteSdpCache! + code.data);
+            game.setState("displayingQr1");
           }
         }
         setTimeout(tick, 200);
@@ -100,28 +93,32 @@ export default function RTCQRCodes() {
           console.log(err.toString());
         });
     }
-  }, [game, state]);
+  }, [game]);
 
   return (
     <Wrapper>
-      {qr1 && qr2 && (state === "displayingQr1" || state === "displayingQr2") &&
+      {qr1 && qr2 && (game.state === "displayingQr1" || game.state === "displayingQr2") &&
           <>
               <p>PCで<a href={"/"}>/</a>を開き、以下のQRコードを順番に読み込んでください。 </p>
-            {state === "displayingQr1" &&
+            {game.state === "displayingQr1" &&
                 <QRCard index={1} src={qr1}/>
             }
-            {state === "displayingQr2" &&
+            {game.state === "displayingQr2" &&
                 <QRCard index={2} src={qr2}/>
             }
-              <Button onClick={() => setState(state === "displayingQr1" ? "displayingQr2" : "displayingQr1")}>もう片方のQRコードを読み取る</Button>
-              {/*<Button onClick={() => setState("capturingQr")}>PCのQRコードを読み取る</Button>*/}
+              <Button onClick={() => game.setState(game.state === "displayingQr1" ? "displayingQr2" : "displayingQr1")}>もう片方のQRコードを表示</Button>
           </>
       }
-      {state === "capturingQr" &&
+      {game.state === "capturingQr" &&
           <>
               <p>PCに表示されているQRコードを順番に読み込んでください。</p>
               <canvas ref={canvasRef} width={300} height={500}></canvas>
               {/*<Button onClick={() => setState("displayingQr1")}>PC用のQRコードを表示する</Button>*/}
+          </>
+      }
+      {game.state === "start" &&
+          <>
+              <p>接続完了</p>
           </>
       }
     </Wrapper>

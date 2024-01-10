@@ -1,6 +1,6 @@
 import {createContext, useRef, useState} from "react";
 
-type States = "displayingQr" | "capturingQr" | "start" | "connecting";
+type States = "displayingQr" | "displayingQr1" | "displayingQr2" | "capturingQr" | "start" | "connecting";
 export type IGameContext = {
   steerAngle: number;
   isAccelerating: boolean;

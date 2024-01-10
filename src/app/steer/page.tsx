@@ -7,15 +7,6 @@ import useGameContext, {GameContext} from "@/app/_contexts/IGameContext";
 import {createQRCode} from "@/app/_utils/connection";
 import RTCQRCodes from "@/app/_components/steer/RTCQRCodes";
 
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 export default function Steer() {
   const game = useGameContext();
 

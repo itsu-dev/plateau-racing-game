@@ -33,6 +33,7 @@ export default function useRTCConnection() {
     };
     dc.onopen = (evt) => {
       console.log('Data channel opened:', evt);
+      game.setState("start");
     };
     dc.onclose = () => {
       console.log('Data channel closed.');
@@ -108,15 +109,12 @@ export default function useRTCConnection() {
     console.log('offer created');
   }, [createPeerConnection, dataChannelOptions, setupDataChannel]);
 
-  const setRemoteSdp = useCallback(() => {
-    // TODO: 相手からの SDP を取得する
-    let sdptext = game.remoteSdp!;
-
+  const setRemoteSdp = useCallback((remoteSdpText: string) => {
     if (peerConnection.current) {
       // Peer Connection が生成済みの場合，SDP を Answer と見なす
       let answer = new RTCSessionDescription({
         type: 'answer',
-        sdp: sdptext,
+        sdp: remoteSdpText,
       });
       peerConnection.current!.setRemoteDescription(answer).then(function () {
         console.log('setRemoteDescription() succeeded.');
@@ -127,7 +125,7 @@ export default function useRTCConnection() {
       // Peer Connection が未生成の場合，SDP を Offer と見なす
       let offer = new RTCSessionDescription({
         type: 'offer',
-        sdp: sdptext,
+        sdp: remoteSdpText,
       });
       // Peer Connection を生成
       peerConnection.current = createPeerConnection();

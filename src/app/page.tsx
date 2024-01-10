@@ -24,7 +24,7 @@ export default function Home() {
   const game = useGameContext();
   return (
     <GameContext.Provider value={game}>
-      { <Canvas shadows>
+      { game.state === "start" && <Canvas shadows>
         <fogExp2 attach='fog' color='white' density={0.0002}/>
         <PerspectiveCamera
           makeDefault
@@ -54,8 +54,12 @@ export default function Home() {
         </Physics>
       </Canvas>
       }
-      {/*<Background />*/}
-      <RTCQRCodes />
+      { game.state !== "start" &&
+          <>
+              <Background />
+              <RTCQRCodes />
+          </>
+      }
     </GameContext.Provider>
   )
 }
