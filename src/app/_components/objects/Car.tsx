@@ -72,15 +72,19 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     }
 
     // ハンドル制御
-    // ((game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle) * delta * 3)
     steerAngle.current += -Math.PI * ((game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle) * delta * 3) / 180;
-    //steerAngle.current = -Math.PI * 10 / 180;
+    //steerAngle.current = -Math.PI * -10 / 180;
     angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), steerAngle.current);
     api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
 
     // 速度制御
+    let cos = 0 <= steerAngle.current % Math.PI && steerAngle.current % Math.PI < Math.PI / 2 || 1.5 * Math.PI < steerAngle.current % Math.PI
+      ? Math.cos(steerAngle.current)
+      : Math.PI / 2 < steerAngle.current % Math.PI && steerAngle.current % Math.PI < 1.5 * Math.PI
+        ? -Math.cos(steerAngle.current)
+        : 1;
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
-    api.applyImpulse([-force.current * Math.sin(steerAngle.current), 0, -force.current * Math.cos(steerAngle.current)], [0, 0, 0]);
+    api.applyLocalImpulse([0, 0, -force.current * (1 / cos)], [0, 0, 0]);
   });
 
   return (
