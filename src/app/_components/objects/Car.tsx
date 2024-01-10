@@ -72,7 +72,7 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     }
 
     // ハンドル制御
-    steerAngle.current += -Math.PI * (game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle) / 180;
+    steerAngle.current += -Math.PI * ((game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle) * delta) / 180;
     angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), steerAngle.current);
     api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
 
