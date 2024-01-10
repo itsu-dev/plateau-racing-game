@@ -24,7 +24,7 @@ type GLTFResult = GLTF & {
   }
 }
 
-const MASS = 3.0;  // 車の質量
+const MASS = 2.0;  // 車の質量
 const SCALE_RATE = 0.0001;  // 車のスケール
 const ACCELERATION = 35.0;  // 加速度性能
 const MAX_ACCELERATION = 100.0;
