@@ -104,7 +104,6 @@ export default function RTCQRCodes() {
 
   return (
     <Wrapper>
-      {qr1 == null && <p>読み込み中...</p>}
       {qr1 && qr2 && (state === "displayingQr1" || state === "displayingQr2") &&
           <>
               <p>PCで<a href={"/"}>/</a>を開き、以下のQRコードを順番に読み込んでください。 </p>
@@ -118,7 +117,7 @@ export default function RTCQRCodes() {
               {/*<Button onClick={() => setState("capturingQr")}>PCのQRコードを読み取る</Button>*/}
           </>
       }
-      {qr1 && qr2 && state === "capturingQr" &&
+      {state === "capturingQr" &&
           <>
               <p>PCに表示されているQRコードを順番に読み込んでください。</p>
               <canvas ref={canvasRef} width={300} height={500}></canvas>
