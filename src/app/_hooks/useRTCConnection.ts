@@ -38,28 +38,29 @@ export default function useRTCConnection() {
       const data = JSON.parse(evt.data);
       switch (data.type) {
         case TYPE_ACCELERATOR_DOWN:
-          game.isAccelerating = true;
+          game.setAccelerating(true);
           break;
         case TYPE_ACCELERATOR_UP:
-          game.isAccelerating = false;
+          game.setAccelerating(false);
           break;
         case TYPE_BRAKE_DOWN:
-          game.isBraking = true;
+          game.setBraking(true);
           break;
         case TYPE_BRAKE_UP:
-          game.isBraking = false;
+          game.setBraking(false);
           break;
         case TYPE_STEER:
-          game.steerAngle = data.degree;
+          game.setSteerAngle(data.degree);
           break;
       }
     };
     dc.onopen = (evt) => {
       console.log('Data channel opened:', evt);
-      game.setState("start");
+      game.setState("connected");
     };
     dc.onclose = () => {
       console.log('Data channel closed.');
+      game.setState("disconnected");
     };
   }, []);
 

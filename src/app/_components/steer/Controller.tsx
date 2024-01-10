@@ -15,8 +15,8 @@ export function Controller({ send }: Props) {
   const { onAcceleratorDown, onAcceleratorUp, onBrakeDown, onBrakeUp } = useController(send);
   return (
     <Wrapper>
-      <Pedal text={"ブレーキ"} color={"red"} onTouchStart={onBrakeDown} onTouchEnd={onBrakeUp} />
-      <Pedal text={"アクセル"} color={"blue"} onTouchStart={onAcceleratorDown} onTouchEnd={onAcceleratorUp} />
+      <Pedal text={"ブレーキ"} color={"#FF5B5B"} onTouchStart={onBrakeDown} onTouchEnd={onBrakeUp} />
+      <Pedal text={"アクセル"} color={"#333333"} onTouchStart={onAcceleratorDown} onTouchEnd={onAcceleratorUp} />
     </Wrapper>
   )
 }

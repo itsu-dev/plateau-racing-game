@@ -9,6 +9,8 @@ const Wrapper = styled.div<{color: string}>`
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
+}
   
   p {
     transform: rotateZ(90deg);

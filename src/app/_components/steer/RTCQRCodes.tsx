@@ -17,6 +17,8 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 16px;
   box-sizing: border-box;
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 `;
 
 export default function RTCQRCodes() {
@@ -116,8 +118,13 @@ export default function RTCQRCodes() {
               <canvas ref={canvasRef} width={300} height={500}></canvas>
           </>
       }
-      {game.state === "start" &&
+      {game.state === "connected" &&
           <Controller send={connection.send} />
+      }
+      {game.state === "disconnected" &&
+          <>
+              <p>接続が切断されました</p>
+          </>
       }
     </Wrapper>
   )

@@ -24,7 +24,7 @@ type GLTFResult = GLTF & {
   }
 }
 
-const MASS = 3.0;  // 車の質量
+const MASS = 1.2;  // 車の質量
 const SCALE_RATE = 0.0001;  // 車のスケール
 const ACCELERATION = 35.0;  // 加速度性能
 const MAX_ACCELERATION = 100.0;
@@ -66,6 +66,8 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
       // 何も踏まれていないならば減速する
       force.current = lerp(force.current, 0, 0.2 * delta);
     }
+
+    console.log(game.isAccelerating, game.isBraking, force.current)
 
     // 最大速度制限
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;

@@ -142,6 +142,11 @@ export default function RTCQRCodes() {
               </QRCards>
           </>
       }
+      {game.state === "disconnected" &&
+        <>
+            <p>接続が切断されました</p>
+        </>
+      }
     </Wrapper>
   )
 }
