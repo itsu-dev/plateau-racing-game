@@ -28,7 +28,6 @@ export default function Home() {
         <fogExp2 attach='fog' color='white' density={0.0002}/>
         <PerspectiveCamera
           makeDefault
-          far={1e5}
           position={[2, 2, 2]}
         />
         {/*<OrbitControls position={[0, 0, 0]}/>*/}
@@ -37,7 +36,7 @@ export default function Home() {
           position={[500, 1000, 1000]}
           intensity={1}
           castShadow
-          shadow-mapSize={[8192, 8192]}
+          shadow-mapSize={1024}
         >
         </directionalLight>
         <Physics gravity={[0, -9.8, 0]}>

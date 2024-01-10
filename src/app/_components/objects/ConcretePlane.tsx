@@ -4,17 +4,17 @@ import {DoubleSide, RepeatWrapping, TextureLoader} from "three";
 import * as CANNON from "cannon-es";
 
 export default function ConcretePlane() {
-  const texture = new TextureLoader().load('assets/concrete.png');
-  useEffect(() => {
-    texture.repeat.set(1000, 1000);
-    texture.wrapT = RepeatWrapping;
-    texture.wrapS = RepeatWrapping;
-  }, []);
+  // const texture = new TextureLoader().load('assets/concrete.png');
+  // useEffect(() => {
+  //   texture.repeat.set(1000, 1000);
+  //   texture.wrapT = RepeatWrapping;
+  //   texture.wrapS = RepeatWrapping;
+  // }, []);
 
   const [ref] = usePlane(() => ({
     args: [1000, 1000, 1],
-    // mass: 0,
-    // position: [0, 0, 1],
+    mass: 0,
+    position: [0, 0, 0],
     rotation: [-Math.PI / 2, 0, 0],
     material: new CANNON.Material('ground'),
     // @ts-ignore
@@ -43,7 +43,7 @@ export default function ConcretePlane() {
         The material gives a mesh its texture or look.
         In this case, it is just a uniform green
       */}
-      <meshStandardMaterial color="gray" roughness={0.8} side={DoubleSide} map={texture} />
+      <meshStandardMaterial color="#444444" roughness={1} side={DoubleSide} />
     </mesh>
   )
 }

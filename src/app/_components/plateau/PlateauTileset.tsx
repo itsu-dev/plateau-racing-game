@@ -57,6 +57,7 @@ export const PlateauTileset: React.FC<PlateauTilesetProps> = ({
 
       // タイル内のすべてのオブジェクトに影とマテリアルを適用する。
       tiles.onLoadModel = scene => {
+        scene.position.y -= 10;
         scene.traverse(object => {
           object.castShadow = true
           object.receiveShadow = true

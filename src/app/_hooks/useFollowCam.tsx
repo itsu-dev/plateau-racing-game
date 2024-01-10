@@ -1,6 +1,6 @@
 import {useFrame, useThree} from "@react-three/fiber";
 import {Ref, RefObject, useEffect, useMemo} from "react";
-import {Object3D, Vector3} from "three";
+import {Object3D, Quaternion, Vector3} from "three";
 
 export default function useFollowCam(ref: RefObject<THREE.Object3D<THREE.Event>>, offset: number[]) {
   const {scene, camera} = useThree()
@@ -10,6 +10,7 @@ export default function useFollowCam(ref: RefObject<THREE.Object3D<THREE.Event>>
   const yaw = useMemo(() => new Object3D(), [])
   const pitch = useMemo(() => new Object3D(), [])
   const worldPosition = useMemo(() => new Vector3(), [])
+  const quot = useMemo(() => new Quaternion(), [])
 
   function onDocumentMouseMove(e: MouseEvent) {
     if (document.pointerLockElement) {
@@ -52,9 +53,11 @@ export default function useFollowCam(ref: RefObject<THREE.Object3D<THREE.Event>>
   }, [camera])
 
   useFrame((_, delta) => {
-    ref.current?.getWorldPosition(worldPosition)
+    ref.current?.getWorldPosition(worldPosition);
+    ref.current?.getWorldQuaternion(quot);
     // pivot.position.lerp(worldPosition, delta * 5)
     pivot.position.set(worldPosition.x, worldPosition.y, worldPosition.z);
+    pivot.quaternion.set(quot.x, quot.y, quot.z, quot.w);
   })
 
   return {pivot, alt, yaw, pitch}
