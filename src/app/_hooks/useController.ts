@@ -1,17 +1,18 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-
-const TYPE_ACCELERATOR_DOWN = 0;
-const TYPE_ACCELERATOR_UP = 1;
-const TYPE_BRAKE_DOWN = 2;
-const TYPE_BRAKE_UP = 3;
+import {
+  TYPE_ACCELERATOR_DOWN,
+  TYPE_ACCELERATOR_UP,
+  TYPE_BRAKE_DOWN,
+  TYPE_BRAKE_UP,
+  TYPE_STEER
+} from "@/app/_hooks/useRTCConnection";
 
 export default function useController(send: (data: any) => void) {
-  const [gamma, _setGamma] = useState<number>(0);
-  const setGamma = useRef(_setGamma);
-
   const onDeviceMotion = useCallback((e: DeviceOrientationEvent) => {
-    alert(e);
-    setGamma.current(e.gamma ?? 0);
+    send({
+      type: TYPE_STEER,
+      degree: e.beta
+    })
   }, []);
 
   useEffect(() => {
@@ -42,6 +43,5 @@ export default function useController(send: (data: any) => void) {
     onAcceleratorUp,
     onBrakeDown,
     onBrakeUp,
-    gamma
   }
 }

@@ -98,7 +98,6 @@ export default function RTCQRCodes() {
 
   return (
     <Wrapper>
-      <Controller send={() => {}} />
       {qr1 && qr2 && (game.state === "displayingQr1" || game.state === "displayingQr2") &&
           <>
               <p>PCで<a href={"/"}>/</a>を開き、以下のQRコードを順番に読み込んでください。 </p>

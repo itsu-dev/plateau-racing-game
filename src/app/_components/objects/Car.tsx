@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, VFC} from 'react';
+import React, {useContext, useEffect, useMemo, useRef, VFC} from 'react';
 import * as THREE from 'three';
 import {GLTF} from 'three/examples/jsm/loaders/GLTFLoader';
 import {useGLTF} from '@react-three/drei';
@@ -11,6 +11,7 @@ import {RootState, useFrame} from "@react-three/fiber";
 import {lerp} from "three/src/math/MathUtils";
 import {clamp} from "@react-spring/shared";
 import * as CANNON from "cannon-es";
+import {GameContext} from "@/app/_contexts/IGameContext";
 
 const ModelPath = 'assets/car2.glb'
 
@@ -23,7 +24,7 @@ type GLTFResult = GLTF & {
   }
 }
 
-const MASS = 1.6;  // 車の質量
+const MASS = 3.0;  // 車の質量
 const SCALE_RATE = 0.0001;  // 車のスケール
 const ACCELERATION = 35.0;  // 加速度性能
 const MAX_ACCELERATION = 100.0;
@@ -41,7 +42,9 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     linearDamping: 0
     // @ts-ignore
   }), useRef());
-  const {yaw} = useFollowCam(ref2, [0, 4, 16])
+  const {yaw} = useFollowCam(ref2, [0, 4, 16]);
+
+  const game = useContext(GameContext);
 
   /**
    * 現在の前に進ませる力
@@ -49,30 +52,15 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
   const force = useRef(0);
 
   /**
-   * アクセルペダルが踏まれているかどうか
-   */
-  const isAcceleratorPedalPressed = useRef(true);
-
-  /**
-   * ブレーキペダルが踏まれているかどうか
-   */
-  const isBrakePedalPressed = useRef(false);
-
-  /**
    * 車の向き
    */
   const angleQuat = useRef(new Quaternion());
 
-  /**
-   * ハンドルの角度
-   */
-  const steerAngle = useRef(0);
-
   useFrame((state: RootState, delta: number) => {
     // アクセルとブレーキの処理
-    if (isAcceleratorPedalPressed) {
+    if (game.isAccelerating) {
       force.current += ACCELERATION * (MAX_FORCE / ((MAX_FORCE - force.current) !== 0 ?  (MAX_FORCE - force.current) : 1)) * delta;
-    } else if (isBrakePedalPressed) {
+    } else if (game.isBraking) {
       force.current -= ACCELERATION * delta;
     } else {
       // 何も踏まれていないならば減速する
@@ -83,8 +71,8 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
 
     api.applyImpulse([0, 0, -force.current], [0, 0, 0]);
-    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), Math.PI * steerAngle.current / 180);
-    //api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
+    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), Math.PI * game.steerAngle / 180);
+    api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
   });
 
   return (

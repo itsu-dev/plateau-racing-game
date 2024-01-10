@@ -1,6 +1,12 @@
 import {useCallback, useContext, useMemo, useRef} from "react";
 import {GameContext} from "@/app/_contexts/IGameContext";
 
+export const TYPE_ACCELERATOR_DOWN = 0;
+export const TYPE_ACCELERATOR_UP = 1;
+export const TYPE_BRAKE_DOWN = 2;
+export const TYPE_BRAKE_UP = 3;
+export const TYPE_STEER = 4;
+
 export default function useRTCConnection() {
   const game = useContext(GameContext);
 
@@ -29,7 +35,24 @@ export default function useRTCConnection() {
     };
     dc.onmessage = (evt) => {
       console.log('Data channel message:', evt.data);
-      let msg = evt.data;
+      const data = JSON.parse(evt.data);
+      switch (data.type) {
+        case TYPE_ACCELERATOR_DOWN:
+          game.isAccelerating = true;
+          break;
+        case TYPE_ACCELERATOR_UP:
+          game.isAccelerating = false;
+          break;
+        case TYPE_BRAKE_DOWN:
+          game.isBraking = true;
+          break;
+        case TYPE_BRAKE_UP:
+          game.isBraking = false;
+          break;
+        case TYPE_STEER:
+          game.steerAngle = data.degree;
+          break;
+      }
     };
     dc.onopen = (evt) => {
       console.log('Data channel opened:', evt);
@@ -155,7 +178,7 @@ export default function useRTCConnection() {
       alert('PeerConnection is not established.');
       return false;
     }
-    console.log(data)
+
     let msg = JSON.stringify(data);
     dataChannel.current!.send(msg);
 
