@@ -59,7 +59,7 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
   const back = -3;
 
   const [chassisBody, chassisBodyApi] = useBox(() => ({
-    args: [4.8, 1.26, 12],
+    args: [4.8, 3, 12],
     mass: 500,
     position: [-1000, 3, 0],
     //linearDamping: 0.9,
@@ -243,32 +243,32 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
 
       {/*@ts-ignore*/}
       <mesh ref={chassisBody} castShadow receiveShadow>
-        <boxBufferGeometry args={[4.8, 1.26, 12]} />
-        <meshNormalMaterial />
+        <boxBufferGeometry args={[4.8, 3, 12]} />
+        <meshStandardMaterial color={0xffffff} />
       </mesh>
 
       {/*@ts-ignore*/}
       <mesh ref={wheel0} rotation={[0, Math.PI / 2, 0]} castShadow receiveShadow>
         <sphereGeometry args={[1.25]} />
-        <meshNormalMaterial />
+        <meshStandardMaterial color={0x000000} />
       </mesh>
 
       {/*@ts-ignore*/}
       <mesh ref={wheel1} rotation={[0, 0, -Math.PI / 2]} castShadow receiveShadow>
         <sphereGeometry args={[1.25]} />
-        <meshNormalMaterial />
+        <meshStandardMaterial color={0x000000} />
       </mesh>
 
       {/*@ts-ignore*/}
       <mesh ref={wheel2} rotation={[0, 0, Math.PI / 2]} castShadow receiveShadow>
         <sphereGeometry args={[1.25]} />
-        <meshNormalMaterial />
+        <meshStandardMaterial color={0x000000} />
       </mesh>
 
       {/*@ts-ignore*/}
       <mesh ref={wheel3} rotation={[0, 0, -Math.PI / 2]} castShadow receiveShadow>
         <sphereGeometry args={[1.25]} />
-        <meshNormalMaterial />
+        <meshStandardMaterial color={0x000000} />
       </mesh>
     </group>
   )

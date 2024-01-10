@@ -54,7 +54,7 @@ export default function useGameContext(): IGameContext {
   const [isStarted, setStarted] = useState(false);
   const [localSdp, setLocalSdp] = useState<string | undefined>(undefined);
   const [remoteSdp, setRemoteSdp] = useState<string | undefined>(undefined);
-  const [state, setState] = useState<States>("displayingQr");
+  const [state, setState] = useState<States>("connected");
   const groundMaterial = useRef(new CANNON.Material("groundMaterial")).current;
 
   useEffect(() => {
