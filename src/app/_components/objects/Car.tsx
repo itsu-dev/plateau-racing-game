@@ -29,7 +29,7 @@ const MASS = 2.0;  // 車の質量
 const SCALE_RATE = 0.0001;  // 車のスケール
 const ACCELERATION = 35.0;  // 加速度性能
 const MAX_ACCELERATION = 100.0;
-const MAX_FORCE = 76.0;
+const MAX_FORCE = 55.0;
 const MAX_STEER_ANGLE = 30.0;
 const MAX_SPEED = 200.0
 
@@ -41,7 +41,7 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     mass: MASS,
     position: [-1000, 0, 0],
     material: new CANNON.Material('slippery'),
-    linearDamping: 0
+    linearDamping: 0.9,
     // @ts-ignore
   }), useRef());
   const {yaw} = useFollowCam(ref2, [0, 4, 16]);
@@ -72,13 +72,15 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     }
 
     // ハンドル制御
+    // ((game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle) * delta * 3)
     steerAngle.current += -Math.PI * ((game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle) * delta * 3) / 180;
+    //steerAngle.current = -Math.PI * 10 / 180;
     angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), steerAngle.current);
     api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
 
     // 速度制御
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
-    api.applyLocalImpulse([-force.current * Math.sin(steerAngle.current), 0, -force.current * Math.cos(steerAngle.current)], [0, 0, 0]);
+    api.applyImpulse([-force.current * Math.sin(steerAngle.current), 0, -force.current * Math.cos(steerAngle.current)], [0, 0, 0]);
   });
 
   return (
