@@ -8,17 +8,36 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "resolutions": {
+    "postprocessing": "~6.28.7"
+  },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@react-three/cannon": "^6.6.0",
+    "@react-three/drei": "^9.17.1",
+    "@react-three/fiber": "^8.2.0",
+    "@react-three/postprocessing": "~2.6.2",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/three": "^0.141.0",
+    "3d-tiles-renderer": "^0.3.13",
+    "jsqr": "^1.4.0",
+    "next": "13.5.4",
+    "qrcode": "^1.5.3",
     "react": "^18",
     "react-dom": "^18",
-    "next": "13.5.4"
+    "styled-components": "^6.1.8",
+    "three": "^0.142.0",
+    "three-stdlib": "^2.12.1"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "13.5.4"
+    "eslint-config-next": "13.5.4",
+    "typescript": "^5"
   }
 }

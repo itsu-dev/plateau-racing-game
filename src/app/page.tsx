@@ -1,95 +1,61 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
 
+import {OrbitControls, PerspectiveCamera, Plane} from '@react-three/drei'
+import {Canvas} from '@react-three/fiber'
+import {EffectComposer, SSAO} from '@react-three/postprocessing'
+import React from 'react'
+import {PlateauTilesetTransform} from "@/app/_components/plateau/PlateauTilesetTransform";
+import {PlateauTileset} from "@/app/_components/plateau/PlateauTileset";
+import ConcretePlane from "@/app/_components/objects/ConcretePlane";
+import {Physics} from "@react-three/cannon";
+import MyBox from "@/app/_components/objects/MyBox";
+import {Car} from "@/app/_components/objects/Car";
+import useGameContext, {GameContext} from "@/app/_contexts/IGameContext";
+import RTCQRCodes from "@/app/_components/game/RTCQRCodes";
+import styled from "styled-components";
+
+const Background = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+`;
 export default function Home() {
+  const game = useGameContext();
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+    <GameContext.Provider value={game}>
+      { <Canvas shadows>
+        <fogExp2 attach='fog' color='white' density={0.0002}/>
+        <PerspectiveCamera
+          makeDefault
+          far={1e5}
+          position={[2, 2, 2]}
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+        {/*<OrbitControls position={[0, 0, 0]}/>*/}
+        <ambientLight intensity={0.5}/>
+        <directionalLight
+          position={[500, 1000, 1000]}
+          intensity={1}
+          castShadow
+          shadow-mapSize={[8192, 8192]}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+        </directionalLight>
+        <Physics gravity={[0, -9.8, 0]}>
+          <ConcretePlane />
+          {/*<MyBox />*/}
+          <Car />
+          <PlateauTilesetTransform>
+            <PlateauTileset
+              path='bldg/13100_tokyo/13101_chiyoda-ku/notexture'
+              center
+            />
+            <PlateauTileset path='bldg/13100_tokyo/13102_chuo-ku/notexture'/>
+          </PlateauTilesetTransform>
+        </Physics>
+      </Canvas>
+      }
+      {/*<Background />*/}
+      <RTCQRCodes />
+    </GameContext.Provider>
   )
 }
