@@ -150,12 +150,13 @@ export default function useRTCConnection() {
     }
   }, [createPeerConnection]);
 
-  const send = useCallback(() => {
+  const send = useCallback((data: any) => {
     if (!peerConnection || peerConnection.current!.connectionState != 'connected') {
       alert('PeerConnection is not established.');
       return false;
     }
-    let msg = "aaa";
+    console.log(data)
+    let msg = JSON.stringify(data);
     dataChannel.current!.send(msg);
 
     return true;

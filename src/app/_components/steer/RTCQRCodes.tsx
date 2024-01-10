@@ -6,6 +6,7 @@ import QRCard from "@/app/_components/game/QRCard";
 import Button from "@/app/_components/game/Button";
 import {GameContext} from "@/app/_contexts/IGameContext";
 import jsQR from "jsqr";
+import {Controller} from "@/app/_components/steer/Controller";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -97,6 +98,7 @@ export default function RTCQRCodes() {
 
   return (
     <Wrapper>
+      <Controller send={() => {}} />
       {qr1 && qr2 && (game.state === "displayingQr1" || game.state === "displayingQr2") &&
           <>
               <p>PCで<a href={"/"}>/</a>を開き、以下のQRコードを順番に読み込んでください。 </p>
@@ -113,13 +115,10 @@ export default function RTCQRCodes() {
           <>
               <p>PCに表示されているQRコードを順番に読み込んでください。</p>
               <canvas ref={canvasRef} width={300} height={500}></canvas>
-              {/*<Button onClick={() => setState("displayingQr1")}>PC用のQRコードを表示する</Button>*/}
           </>
       }
       {game.state === "start" &&
-          <>
-              <p>接続完了</p>
-          </>
+          <Controller send={connection.send} />
       }
     </Wrapper>
   )

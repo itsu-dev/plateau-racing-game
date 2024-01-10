@@ -114,16 +114,15 @@ export default function RTCQRCodes() {
 
   return (
     <Wrapper>
-      {qr1 == null && <p>読み込み中...</p>}
       {qr1 && qr2 && game.state === "displayingQr" &&
           <>
-              <p>このゲームでは、スマートフォンをハンドルとして使用します。スマートフォンで<a href={"/steer"}>/steer</a>を開き、以下のQRコードを順番に読み込んでください。
+              <p>このゲームでは、スマートフォンをハンドルとして使用します。スマートフォンで<a href={"/steer"}>/steer</a>を開き、以下のQRコードを順番に読み込んでください。読み込めたら、次に「スマートフォンのQRコードを読み込む」をクリックしてスマートフォンのQRコードを読み込んでください。
               </p>
               <QRCards>
                   <QRCard index={1} src={qr1}/>
                   <QRCard index={2} src={qr2}/>
               </QRCards>
-              <Button onClick={() => game.setState("capturingQr")}>ハンドルのQRコードを読み込む</Button>
+              <Button onClick={() => game.setState("capturingQr")}>スマートフォンのQRコードを読み込む</Button>
           </>
       }
       {qr1 && qr2 && game.state === "capturingQr" &&
@@ -135,7 +134,8 @@ export default function RTCQRCodes() {
       }
       {qr1 && qr2 && game.state === "connecting" &&
           <>
-              <p>接続しています。まだスマートフォンでQRコードを読み込んでいない場合は、スマートフォンで<a href={"/steer"}>/steer</a>を開き、以下のQRコードを順番に読み込んでください。</p>
+              <p>接続しています。まだスマートフォンでQRコードを読み込んでいない場合は、スマートフォンで<a href={"/steer"}>/steer</a>を開き、以下のQRコードを順番に読み込んでください。
+              </p>
               <QRCards>
                   <QRCard index={1} src={qr1}/>
                   <QRCard index={2} src={qr2}/>
