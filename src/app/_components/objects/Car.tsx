@@ -12,6 +12,7 @@ import {lerp} from "three/src/math/MathUtils";
 import {clamp} from "@react-spring/shared";
 import * as CANNON from "cannon-es";
 import {GameContext} from "@/app/_contexts/IGameContext";
+import {a} from "@react-spring/three";
 
 const ModelPath = 'assets/car2.glb'
 
@@ -76,8 +77,7 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
 
     // 速度制御
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
-    api.applyImpulse([0, 0, -force.current], [0, 0, 0]);
-    api.applyTorque([0, 30000 * delta * steerAngle / 3, 0])
+    api.applyLocalImpulse([-force.current * Math.sin(steerAngle), 0, -force.current * Math.cos(steerAngle)], [0, 0, 0]);
   });
 
   return (
