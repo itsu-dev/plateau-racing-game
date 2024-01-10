@@ -58,6 +58,8 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
    */
   const angleQuat = useRef(new Quaternion());
 
+  const steerAngle = useRef(0);
+
   useFrame((state: RootState, delta: number) => {
     // アクセルとブレーキの処理
     if (game.isAccelerating) {
@@ -70,14 +72,13 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     }
 
     // ハンドル制御
-    let steerAngle = game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle;
-    steerAngle =  -Math.PI * steerAngle / 180;
-    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), steerAngle);
+    steerAngle.current += -Math.PI * (game.steerAngle > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle) / 180;
+    angleQuat.current.setFromAxisAngle(new Vector3(0,1,0), steerAngle.current);
     api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
 
     // 速度制御
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
-    api.applyLocalImpulse([-force.current * Math.sin(steerAngle), 0, -force.current * Math.cos(steerAngle)], [0, 0, 0]);
+    api.applyLocalImpulse([-force.current * Math.sin(steerAngle.current), 0, -force.current * Math.cos(steerAngle.current)], [0, 0, 0]);
   });
 
   return (
