@@ -16,7 +16,23 @@ export default function useController(send: (data: any) => void) {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("deviceorientation", onDeviceMotion);
+    // @ts-ignore
+    if (DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // iOS 13+ の Safari
+      // 許可を取得
+      // @ts-ignore
+      DeviceOrientationEvent.requestPermission().then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener("deviceorientation", onDeviceMotion);
+          } else {
+            alert("許可が必要です！");
+          }
+        })
+        .catch(console.error) // https通信でない場合などで許可を取得できなかった場合
+    } else {
+      window.addEventListener("deviceorientation", onDeviceMotion);
+    }
+
     return () => {
       window.removeEventListener("deviceorientation", onDeviceMotion);
     }
