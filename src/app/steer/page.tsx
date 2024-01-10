@@ -45,3 +45,5 @@ export default function Steer() {
     </GameContext.Provider>
   )
 }
+
+export const runtime = 'edge';

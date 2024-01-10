@@ -59,3 +59,5 @@ export default function Home() {
     </GameContext.Provider>
   )
 }
+
+export const runtime = 'edge';
