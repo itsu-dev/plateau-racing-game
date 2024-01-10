@@ -76,7 +76,8 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
 
     // 速度制御
     force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
-    api.applyImpulse([-force.current * Math.sin(steerAngle), 0, -force.current * Math.cos(steerAngle)], [0, 0, 0]);
+    api.applyImpulse([0, 0, -force.current], [0, 0, 0]);
+    api.applyTorque([0, 30000 * delta * steerAngle / 3, 0])
   });
 
   return (
