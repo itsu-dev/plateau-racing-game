@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   padding: 32px 48px;
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   flex-direction: column;
 `;
@@ -116,7 +116,7 @@ export default function RTCQRCodes() {
     <Wrapper>
       {qr1 && qr2 && game.state === "displayingQr" &&
           <>
-              <p>このゲームでは、スマートフォンをハンドルとして使用します。スマートフォンで<a href={"/steer"}>/steer</a>を開き、以下のQRコードを順番に読み込んでください。読み込めたら、次に「スマートフォンのQRコードを読み込む」をクリックしてスマートフォンのQRコードを読み込んでください。
+              <p>このゲームでは、スマートフォンをハンドルとして使用します（ゲーム内の一部操作はiOSには対応しておりません）。スマートフォンで<a href={"/steer"}>/steer</a>を開き、以下のQRコードを順番に読み込んでください。その後「スマートフォンのQRコードを読み込む」をクリックしてスマートフォンのQRコードを読み込んでください。
               </p>
               <QRCards>
                   <QRCard index={1} src={qr1}/>
@@ -129,7 +129,6 @@ export default function RTCQRCodes() {
           <>
               <p>スマートフォンに表示されたQRコードを順番に読み込んでください。</p>
               <canvas ref={canvasRef} width={800} height={400}></canvas>
-              <Button onClick={() => game.setState("displayingQr")}>スマホ用のQRコードを表示する</Button>
           </>
       }
       {qr1 && qr2 && game.state === "connecting" &&

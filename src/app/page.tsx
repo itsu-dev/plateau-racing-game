@@ -20,6 +20,13 @@ const Background = styled.div`
   background: rgb(238,174,202);
   background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 `;
+
+const Description = styled.p`
+  position: fixed;
+  bottom: 0;
+  right: 32px;
+;`
+
 export default function Home() {
   const game = useGameContext();
   return (
@@ -56,6 +63,7 @@ export default function Home() {
       { game.state !== "connected" &&
           <>
               <Background />
+              <Description>このゲームは国土交通省による3D都市データ（<a href={"https://www.mlit.go.jp/plateau/"}>Plateau</a>）を使用しております</Description>
               <RTCQRCodes />
           </>
       }
