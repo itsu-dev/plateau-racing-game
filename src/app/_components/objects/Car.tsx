@@ -189,22 +189,22 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     if (game.isAccelerating) {
       vehicleApi.applyEngineForce(maxForce, 2);
       vehicleApi.applyEngineForce(maxForce, 3);
-      force.current += ACCELERATION * (MAX_FORCE / ((MAX_FORCE - force.current) !== 0 ? (MAX_FORCE - force.current) : 1)) * delta;
+      //force.current += ACCELERATION * (MAX_FORCE / ((MAX_FORCE - force.current) !== 0 ? (MAX_FORCE - force.current) : 1)) * delta;
     } else if (game.isBraking) {
       vehicleApi.applyEngineForce(-maxForce, 2);
       vehicleApi.applyEngineForce(-maxForce, 3);
-      force.current -= ACCELERATION * delta;
+      //force.current -= ACCELERATION * delta;
     } else {
       vehicleApi.applyEngineForce(0, 2);
       vehicleApi.applyEngineForce(0, 3);
       // 何も踏まれていないならば減速する
-      force.current = lerp(force.current, 0, 0.2 * delta);
+      //force.current = lerp(force.current, 0, 0.2 * delta);
     }
 
     // ハンドル制御
     steerAngle.current = game.steerAngle * 2 > MAX_STEER_ANGLE ? MAX_STEER_ANGLE : game.steerAngle * 2 < -MAX_STEER_ANGLE ? -MAX_STEER_ANGLE : game.steerAngle * 2;
     //steerAngle.current = 10;
-    angleQuat.current.setFromAxisAngle(new Vector3(0, 1, 0), steerAngle.current);
+    //angleQuat.current.setFromAxisAngle(new Vector3(0, 1, 0), steerAngle.current);
     //api.quaternion.set(angleQuat.current.x, angleQuat.current.y, angleQuat.current.z, angleQuat.current.w);
 
     vehicleApi.setSteeringValue(-steerAngle.current / MAX_STEER_ANGLE, 2);
@@ -220,10 +220,10 @@ export const Car: VFC<JSX.IntrinsicElements['group']> = props => {
     //     : 1;
     // cos = cos === 0 || cos === Infinity || isNaN(cos) ? 1 : cos;
     // //console.log(1/cos);
-    force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
+    //force.current = force.current > MAX_FORCE ? MAX_FORCE : force.current < -MAX_FORCE ? -MAX_FORCE : force.current;
     //api.applyLocalImpulse([0, 0, -force.current], [0, 0, 0]);
-    const velocity = new Vector3(0, 0, 0);
-    velocity.applyQuaternion(angleQuat.current);
+    //const velocity = new Vector3(0, 0, 0);
+    //velocity.applyQuaternion(angleQuat.current);
     //api.velocity.copy(velocity);
     //velocity.applyQuaternion(angleQuat.current);
     //api.velocity.set(velocity.x, velocity.y, velocity.z);
